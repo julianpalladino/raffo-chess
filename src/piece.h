@@ -14,8 +14,10 @@ enum kind { king, queen, rook, bishop, knight, pawn };
 
 class piece {    
   public:
+    bool nil;
     color c;
     kind k;
     piece();
     piece(color c, kind k);
+    char toChar();
 };
