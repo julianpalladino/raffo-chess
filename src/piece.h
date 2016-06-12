@@ -19,5 +19,6 @@ class piece {
     kind k;
     piece();
     piece(color c, kind k);
+    piece(string notation);
     char toChar();
 };
