@@ -6,7 +6,6 @@
 using namespace std;
 
 void raffoChess(){
-
   cout << "_________________________________________________________________________________________________________________________________________________" << endl << endl;
   cout << "      ,...., " << endl;
   cout << "    ,::::::< " << endl;
@@ -45,10 +44,7 @@ int main() {
     b.show();
     cout << "Insert command (h for help):  ";
     cin >> move;
-    if (move == "h"){
-
-                          
-                          
+    if (move == "h"){            
       cout << "______________________________________________Help menu______________________________________________" << endl;
       printIndented("Commands",0);
       printIndented("Help: h",1);
@@ -148,26 +144,68 @@ void board::movePiece(string move){
   // For now, only interpreting the move in the way "AXBY",
   // where AX is the starting position of the piece and BY is the final
 
-  if (!m[move[1]-49][move[0]-97].nil && m[move[1]-49][move[0]-97].c == turn){
+  if (!m[move[1]-49][move[0]-97].nil && m[move[1]-49][move[0]-97].c == turn && validateMove(move)){
     m[move[3]-49][move[2]-97] = m[move[1]-49][move[0]-97];
     m[move[1]-49][move[0]-97].nil = true;
+    changeTurn();
   }else{
     cout << "Invalid move" << endl;
   }
 }
 
-bool validateVertical(int fromY, int toY, color c){
+void board::changeTurn(){
+  if (turn == white){
+    turn = black;
+  }else{
+    turn = white;
+  }
+}
+
+bool validateVertical(int x, int fromY, int toY, color c){
+  if(toY > fromY){
+    for(int i = fromY; i < toY-1; ++i){
+      if (!m[x][i].nil){
+        return false;
+      }
+    }
+  }else{
+    for(int i = toY; i > fromY; --i){
+      if (!m[x][i].nil){
+        return false;
+      }
+    }
+  }
   return true;
 }
 
-bool validateHorizontal(int fromX, int toX, color c){
+bool validateHorizontal(int y, int fromX, int toX, color c){
+  if(toX > fromX){
+    for(int i = fromX; i < toX-1; ++i){
+      if (!m[i][y].nil){
+        return false;
+      }
+    }
+  }else{
+    for(int i = toX; i > fromX; --i){
+      if (!m[i][y].nil){
+        return false;
+      }
+    }
+  }
   return true;
 }
 
 bool validateDiagonal(int fromX,int fromY,int toX,int toY, color c){
+  // todo
   return true;
 }
 
+int abs(int n){
+  if (n<0){
+    return n*(-1);
+  }
+  return n;
+}
 
 bool board::validateMove(string move){
   int fromX = move[1]-49;
@@ -176,41 +214,46 @@ bool board::validateMove(string move){
   int toY = move[2]-97;
   bool valid = true;
 
-  switch(m[fromX][fromY].k){
-    case king:
-      // TODO: validate check
-      return (toX - fromX <= 1 && toY-fromY <= 1);
-
-    case queen:
-      if(fromX == toX){
-        return validateVertical(fromY, toY, m[fromX][fromY].c);
-      }else if(fromY == toY){
-        return validateHorizontal(fromX, toX, m[fromX][fromY].c);
-      }else if(toY-fromY == toX-fromX){
-        return validateDiagonal(fromX, fromY, toX, toY, m[fromX][fromY].c);
-      }else{
-        return false;
-      }
-    case rook:
-      if(fromX == toX){
-        return validateVertical(fromY, toY, m[fromX][fromY].c);
-      }else if(fromY == toY){
-        return validateHorizontal(fromX, toX, m[fromX][fromY].c);
-      }else{
-        return false;
-      }
-    case bishop:
-      if(toY-fromY == toX-fromX){
-        return validateDiagonal(fromX, fromY, toX, toY, m[fromX][fromY].c);
-      }else{
-        return false;
-      }
-    case knight:
-      //todo
-    case pawn:
-      //todo
-    break;
+  // Validates board limits
+  if (toX % 8 != toX || toY % 8 != toY){
+    return false;
   }
+
+  // Validates color turn
+  if (m[fromX][fromY].c != turn){
+    return false;
+  }
+
+  // Validates not eating self color piece
+  if (!m[toX][toY].nil && (m[toX][toY].c == m[fromX][fromY].c)){
+    return false;
+  }
+  if (m[fromX][fromY].k == king){
+    // TODO: validate check
+    return (toX - fromX <= 1 && toY-fromY <= 1);
+  }
+  if (m[fromX][fromY].k == knight){
+    return (abs(fromY - toY) * abs(fromX - toX) == 2);
+  }
+  if (m[fromX][fromY].k == pawn){
+    //todo
+    if (m[fromX][fromY].c == white && (fromX==1 && toX == 3) || toX==fromX+1){
+      return true;
+    }
+    if (m[fromX][fromY].c == black && (fromX==6 && toX == 4) || toX==fromX-1){
+      return true;
+    }
+  }
+  if (fromX == toX && (m[fromX][fromY].k == queen || m[fromX][fromY].k == rook)){
+    return validateVertical(fromX, fromY, toY, m[fromX][fromY].c);
+  }
+  if (fromY == toY && (m[fromX][fromY].k == queen || m[fromX][fromY].k == rook)){
+    return validateHorizontal(fromY, fromX, toX, m[fromX][fromY].c);
+  }
+  if(abs(toY-fromY) == abs(toX-fromX) && (m[fromX][fromY].k == queen || m[fromX][fromY].k == bishop)){
+    return validateDiagonal(fromX, fromY, toX, toY, m[fromX][fromY].c);
+  }
+  return false;
 }
     
 void board::setPiece(string pos, piece p){
