@@ -2,9 +2,6 @@
 #include <vector>
 #include <iostream>
 #include <string>
-#include <sstream>
-using namespace std;
-
 
 using namespace std;
 
@@ -32,7 +29,7 @@ void raffoChess(){
 
 board::board(): board(standard) {}
 
-board::board(startingPosition pos) {
+board::board(startingPosition pos): m(8, vector<piece>(8)) {
   turn = white;
   m = vector<vector<piece> > (8, vector<piece>(8));
   if (pos == standard){
@@ -68,8 +65,29 @@ board::board(startingPosition pos) {
     setPiece("h8", piece(black, rook));
   }
   raffoChess();
-  show();
 }
+
+// void board::show(){
+//   for(int i = 7; i >= 0; i--){
+//     for(int j = 0; j < 8; j++){
+//       if (m[i][j].nil){
+//         cout << " · ";
+//       }else{
+//         cout << " " << m[i][j].toChar() << " ";
+//       }
+//     }
+//     cout << "   " << i+1 << endl;
+//   }
+
+//   // letters
+//   cout << endl;
+//   for(int i = 0; i < 8; i++){
+
+//     char a = i+97;
+//     cout << " " << a << " ";
+//   }
+//   cout << endl;
+// }
 
 void board::movePiece(string move){
   // For now, only interpreting the move in the way "AXBY",
@@ -199,4 +217,8 @@ void board::setPiece(string pos, piece p){
 // recieves the matrix position
 void board::setPiece(int mX, int mY, piece p){
   m[mX][mY] = p;
+}
+
+piece board::getPiece(int col, int row) {
+  return m[col][row];
 }

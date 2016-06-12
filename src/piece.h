@@ -8,6 +8,7 @@
 
 using namespace std;
 
+// This enums MUST remain in this order
 enum color { white, black };
 
 enum kind { king, queen, rook, bishop, knight, pawn };

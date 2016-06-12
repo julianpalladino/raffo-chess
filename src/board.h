@@ -5,8 +5,6 @@
 #include <list>
 #include "piece.h"
 
-// #include "Tiempo.h"
-
 using namespace std;
 
 enum startingPosition { empty, standard };
@@ -41,4 +39,6 @@ class board {
     vector< vector<piece> > m;
 
     color turn;
+
+    piece getPiece(int i, int j);
 };

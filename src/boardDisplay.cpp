@@ -21,8 +21,22 @@ boardDisplay::boardDisplay(): board() {
   square_color[0] = al_map_rgb(50, 50, 50);
   square_color[1] = al_map_rgb(200, 200, 200);
 
+  pieces_bmps[0] = al_load_bitmap("../assets/images/b_king.png");
+  pieces_bmps[1] = al_load_bitmap("../assets/images/b_queen.png");
+  pieces_bmps[2] = al_load_bitmap("../assets/images/b_rook.png");
+  pieces_bmps[3] = al_load_bitmap("../assets/images/b_bishop.png");
+  pieces_bmps[4] = al_load_bitmap("../assets/images/b_knight.png");
+  pieces_bmps[5] = al_load_bitmap("../assets/images/b_pawn.png");
+  pieces_bmps[6] = al_load_bitmap("../assets/images/w_king.png");
+  pieces_bmps[7] = al_load_bitmap("../assets/images/w_queen.png");
+  pieces_bmps[8] = al_load_bitmap("../assets/images/w_rook.png");
+  pieces_bmps[9] = al_load_bitmap("../assets/images/w_bishop.png");
+  pieces_bmps[10] = al_load_bitmap("../assets/images/w_knight.png");
+  pieces_bmps[11] = al_load_bitmap("../assets/images/w_pawn.png");
+
   ALLEGRO_FONT * font = al_load_ttf_font("../assets/fonts/Arial.ttf", 15, 0);
   if (!font) cerr << "ERROR loading font\n";
+
   for (int i=0; i < 8; ++i) {
     for (int j = 0; j < 8; ++j) {
       clear_square(i, j);
@@ -33,35 +47,40 @@ boardDisplay::boardDisplay(): board() {
     al_draw_text(font, al_map_rgb(0,0,0), 5, board_size - text_offset - 5, 0, numbers[i]);
     al_draw_text(font, al_map_rgb(0,0,0), board_size - 15, board_size - text_offset - 5, 0, numbers[i]);
   }
-
-  pieces[0] = al_load_bitmap("../assets/images/w_king.png");
-  pieces[1] = al_load_bitmap("../assets/images/w_queen.png");
-  pieces[2] = al_load_bitmap("../assets/images/w_rook.png");
-  pieces[3] = al_load_bitmap("../assets/images/w_bishop.png");
-  pieces[4] = al_load_bitmap("../assets/images/w_knight.png");
-  pieces[5] = al_load_bitmap("../assets/images/w_pawn.png");
-  pieces[6] = al_load_bitmap("../assets/images/b_king.png");
-  pieces[7] = al_load_bitmap("../assets/images/b_queen.png");
-  pieces[8] = al_load_bitmap("../assets/images/b_rook.png");
-  pieces[9] = al_load_bitmap("../assets/images/b_bishop.png");
-  pieces[10] = al_load_bitmap("../assets/images/b_knight.png");
-  pieces[11] = al_load_bitmap("../assets/images/b_pawn.png");
-
+  show();
   al_flip_display();
 }
 
-void boardDisplay::clear_square(int i, int j) {
-  al_draw_filled_rectangle(margin_size + square_size * (i),
-                           square_size * (7 - j) + margin_size,
-                           margin_size + square_size * (i + 1),
-                           square_size * (8 - j) + margin_size,
-                           square_color[(i + j) & 1]); // 0 = black, 1 = white
+int boardDisplay::col_to_screen_pos(int x) {
+  return margin_size + x * square_size;
 }
 
-void boardDisplay::show(){
+int boardDisplay::row_to_screen_pos(int x) {
+  return margin_size + (7 - x) * square_size;
+}
 
+void boardDisplay::clear_square(int i, int j) {
+  al_draw_filled_rectangle(col_to_screen_pos(i),
+                           row_to_screen_pos(j-1),
+                           col_to_screen_pos(i + 1),
+                           row_to_screen_pos(j),
+                           square_color[(i + j) & 1]); // 0 = black, 1 = white
 }
 
 boardDisplay::~boardDisplay() {
   al_destroy_display(window);
+}
+
+void boardDisplay::show() {
+  for (int i = 0; i < 8; ++i) {
+    for (int j = 0; j < 8; ++j) {
+      clear_square(i, j);
+      piece p = getPiece(j, i);
+      if (!p.nil)
+        al_draw_bitmap(pieces_bmps[p.k + 6 * p.c],
+                       col_to_screen_pos(i),
+                       row_to_screen_pos(j), 0);
+    }
+  }
+  al_flip_display();
 }

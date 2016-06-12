@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "boardDisplay.h"
+#include "boardConsole.h"
 
 using namespace std;
 
@@ -31,7 +32,9 @@ void printHelpMenu() {
   cout << "_____________________________________________________________________________________________________" << endl;
 }
 
-int main() {
+using namespace std;
+
+int main(int argc, char const *argv[]) {
   boardDisplay b;
   string move;
   string enterAndIndent = "\n    ";
