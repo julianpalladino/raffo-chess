@@ -2,6 +2,9 @@
 #include <vector>
 #include <iostream>
 #include <string> 
+#include <sstream>
+using namespace std;
+
 
 using namespace std;
 
@@ -119,23 +122,32 @@ board::board(startingPosition pos) {
 }
 
 void board::show(){
+  bool color = true;
   for(int i = 7; i >= 0; i--){
     for(int j = 0; j < 8; j++){
-      if (m[i][j].nil){
-        cout << " · ";
+      if (color){
+        cout << "\033[44m";
       }else{
-        cout << " " << m[i][j].toChar() << " ";
+        cout << "\033[46m";
       }
+
+      if (m[i][j].nil){
+        cout << "  ";
+      }else{
+        cout << m[i][j].toCharPiece() << " ";
+      }
+
+      color = !color;
     }
-    cout << "   " << i+1 << endl;
+    color = !color;
+    cout << "\033[0m" << i+1 << endl;
   }
 
   // letters
-  cout << endl;
   for(int i = 0; i < 8; i++){
 
-    char a = i+97;
-    cout << " " << a << " ";
+    char a = i+65;
+    cout << a << " ";
   }
   cout << endl;
 }
@@ -161,42 +173,44 @@ void board::changeTurn(){
   }
 }
 
-bool validateVertical(int x, int fromY, int toY, color c){
-  if(toY > fromY){
-    for(int i = fromY; i < toY-1; ++i){
-      if (!m[x][i].nil){
-        return false;
-      }
-    }
-  }else{
-    for(int i = toY; i > fromY; --i){
-      if (!m[x][i].nil){
-        return false;
-      }
+bool board::validateVertical(int x, int fromY, int toY, color c){
+  int lower = min(fromY, toY);
+  int higher = max(fromY, toY);
+  for(int i = lower; i < higher-1; ++i){
+    if (!m[x][i].nil && i != fromY){
+      return false;
     }
   }
   return true;
 }
 
-bool validateHorizontal(int y, int fromX, int toX, color c){
-  if(toX > fromX){
-    for(int i = fromX; i < toX-1; ++i){
-      if (!m[i][y].nil){
-        return false;
-      }
-    }
-  }else{
-    for(int i = toX; i > fromX; --i){
-      if (!m[i][y].nil){
-        return false;
-      }
+bool board::validateHorizontal(int y, int fromX, int toX, color c){
+  int lower = min(fromX, toX);
+  int higher = max(fromX, toX);
+  for(int i = lower; i < higher-1; ++i){
+    if (!m[i][y].nil && i != fromX){
+      cout << i << ", " << y << m[i][y].toCharPiece() << endl;
+      return false;
     }
   }
   return true;
 }
 
-bool validateDiagonal(int fromX,int fromY,int toX,int toY, color c){
-  // todo
+bool board::validateDiagonal(int fromX,int fromY,int toX,int toY, color c){
+  int j;
+  if(toY - fromY == toX - fromX){ // going in the same direction
+    for(int i = min(fromX, toX), j = min(fromY, toY); i < max(fromX, toX)-1; ++i, ++j){
+      if (!m[i][j].nil && i != fromX && j != fromY){
+        return false;
+      }
+    }
+  }else{
+    for(int i = min(fromX, toX), j = max(fromY, toY); i < max(fromX, toX)-1; ++i, --j){
+      if (!m[i][j].nil){
+        return false;
+      }
+    }
+  }
   return true;
 }
 
@@ -213,7 +227,6 @@ bool board::validateMove(string move){
   int toX = move[3]-49;
   int toY = move[2]-97;
   bool valid = true;
-
   // Validates board limits
   if (toX % 8 != toX || toY % 8 != toY){
     return false;
@@ -230,6 +243,7 @@ bool board::validateMove(string move){
   }
   if (m[fromX][fromY].k == king){
     // TODO: validate check
+    // TODO: validate castle
     return (toX - fromX <= 1 && toY-fromY <= 1);
   }
   if (m[fromX][fromY].k == knight){

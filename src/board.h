@@ -4,6 +4,7 @@
 #include <iostream>
 #include <list>
 #include "piece.h"
+
 // #include "Tiempo.h"
 
 using namespace std;
@@ -32,4 +33,10 @@ class board {
     bool validateMove(string move);
 
     void changeTurn();
+
+    bool validateVertical(int x, int fromY, int toY, color c);
+
+    bool validateHorizontal(int y, int fromX, int toX, color c);
+
+    bool validateDiagonal(int fromX,int fromY,int toX,int toY, color c);
 };

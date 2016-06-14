@@ -74,8 +74,41 @@ piece::piece(string notation) { //notation is CK, where C is color and K is kind
   k = inputK;
 }
 
+string piece::toCharPiece(){
+  if(c == white){
+    switch(k){
+      case king:
+        return "\033[30m\u265A";
+      case queen:
+        return "\033[30m\u265B";
+      case rook:
+        return "\033[30m\u265C";
+      case bishop:
+        return "\033[30m\u265D";
+      case knight:
+        return "\033[30m\u265E";
+      case pawn:
+        return "\033[30m\u265F";
+    }
+  }else{
+    switch(k){
+      case king:
+        return "\033[37m\u265A";
+      case queen:
+        return "\033[37m\u265B";
+      case rook:
+        return "\033[37m\u265C";
+      case bishop:
+        return "\033[37m\u265D";
+      case knight:
+        return "\033[37m\u265E";
+      case pawn:
+        return "\033[37m\u265F";
+    }
+  }
+}
 
-char piece::toChar(){
+char piece::toCharLetter(){
   // whites are in CAPS, blacks are not
   if(c == white){
     switch(k){
