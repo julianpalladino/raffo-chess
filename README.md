@@ -5,9 +5,7 @@ Chess platform, on console or on GUI.
 
 ```
 sudo add-apt-repository ppa:allegro/5.2
-
 sudo apt-get update
-
 sudo apt-get install liballegro5-dev
 ```
 
@@ -17,8 +15,8 @@ sudo apt-get install liballegro5-dev
 Compile piece.cpp and board.cpp, and run.
 
 ### In console (Windows)
-- Since the board uses unicode character, we recommend using MinGW. Get it from http://www.mingw.org/
+Since the board uses unicode character, we recommend using MinGW. Get it from http://www.mingw.org/
 
 ### In GUI (Not fully implemented yet)
-- Just run make
+Just run `make`
 
