@@ -1,4 +1,7 @@
-# raffo-chess
-Chess platform that helps you get better.
+# Raffo Chess
+Chess platform on console.
 
-For the people triying to run raffo-chess on Windows we recommend using MinGW. http://www.mingw.org/
+## Running the project
+- To run the project in console (Bash), compile piece.cpp and board.cpp, and run.
+
+- To run on Windows we recommend using MinGW (Since the board uses unicode characters). Get it from http://www.mingw.org/
