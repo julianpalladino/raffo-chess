@@ -1,12 +1,12 @@
 #include <iostream>
-#include "display.h"
+#include "boardDisplay.h"
 
 using namespace std;
 
 const char* numbers[] = {"1", "2", "3", "4", "5", "6", "7", "8"};
 const char* letters[] = {"a", "b", "c", "d", "e", "f", "g", "h"};
 
-display::display(/*board & b*/)/*: brd(b)*/ {
+boardDisplay::boardDisplay(): board() {
   if (!al_init()) cerr << "Error initializing allegro\n";
   if (!al_init_image_addon()) cerr << "Error initializing images\n";
   al_init_font_addon();
@@ -38,7 +38,7 @@ display::display(/*board & b*/)/*: brd(b)*/ {
   al_flip_display();
 }
 
-void display::clear_square(int i, int j) {
+void boardDisplay::clear_square(int i, int j) {
   al_draw_filled_rectangle(margin_size + square_size * (i),
                            square_size * (7 - j) + margin_size,
                            margin_size + square_size * (i + 1),
@@ -46,6 +46,6 @@ void display::clear_square(int i, int j) {
                            square_color[(i + j) & 1]); // 0 = black, 1 = white
 }
 
-display::~display() {
+boardDisplay::~boardDisplay() {
   al_destroy_display(window);
 }

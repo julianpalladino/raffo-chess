@@ -13,23 +13,21 @@ enum startingPosition { empty, standard };
 
 class board {
   public:
-    vector< vector<piece> > m;
-
-    color turn;
 
     board();
 
     board(startingPosition pos);
 
-    void show();
-
     void movePiece(string move);
-    
+
     void setPiece(string pos, piece p);
 
     void setPiece(int mX, int mY, piece p);
 
-  private:
+  protected:
+
+    virtual void show() {}
+
     bool validateMove(string move);
 
     void changeTurn();
@@ -39,4 +37,8 @@ class board {
     bool validateHorizontal(int y, int fromX, int toX, color c);
 
     bool validateDiagonal(int fromX,int fromY,int toX,int toY, color c);
+
+    vector< vector<piece> > m;
+
+    color turn;
 };
