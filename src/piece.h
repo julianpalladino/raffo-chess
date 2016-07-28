@@ -12,7 +12,7 @@ enum color { white, black };
 
 enum kind { king, queen, rook, bishop, knight, pawn };
 
-class piece {    
+class piece {
   public:
     bool nil;
     color c;
@@ -22,4 +22,5 @@ class piece {
     piece(string notation);
     char toCharLetter();
     string toCharPiece();
+    int toInt();
 };

@@ -143,6 +143,10 @@ char piece::toCharLetter(){
   }
 }
 
+int piece::toInt() {
+  return 6 * c + k;
+}
+
 piece::piece(color colorInput, kind kindInput) {
   nil = false;
   c = colorInput;

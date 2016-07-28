@@ -34,6 +34,18 @@ boardDisplay::boardDisplay(): board() {
     al_draw_text(font, al_map_rgb(0,0,0), board_size - 15, board_size - text_offset - 5, 0, numbers[i]);
   }
 
+  pieces[0] = al_load_bitmap("../assets/images/w_king.png");
+  pieces[1] = al_load_bitmap("../assets/images/w_queen.png");
+  pieces[2] = al_load_bitmap("../assets/images/w_rook.png");
+  pieces[3] = al_load_bitmap("../assets/images/w_bishop.png");
+  pieces[4] = al_load_bitmap("../assets/images/w_knight.png");
+  pieces[5] = al_load_bitmap("../assets/images/w_pawn.png");
+  pieces[6] = al_load_bitmap("../assets/images/b_king.png");
+  pieces[7] = al_load_bitmap("../assets/images/b_queen.png");
+  pieces[8] = al_load_bitmap("../assets/images/b_rook.png");
+  pieces[9] = al_load_bitmap("../assets/images/b_bishop.png");
+  pieces[10] = al_load_bitmap("../assets/images/b_knight.png");
+  pieces[11] = al_load_bitmap("../assets/images/b_pawn.png");
 
   al_flip_display();
 }
@@ -44,6 +56,10 @@ void boardDisplay::clear_square(int i, int j) {
                            margin_size + square_size * (i + 1),
                            square_size * (8 - j) + margin_size,
                            square_color[(i + j) & 1]); // 0 = black, 1 = white
+}
+
+void boardDisplay::show(){
+
 }
 
 boardDisplay::~boardDisplay() {

@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include "boardConsole.h"
+#include "boardDisplay.h"
 
 using namespace std;
 
@@ -32,13 +32,13 @@ void printHelpMenu() {
 }
 
 int main() {
-  boardConsole b;
+  boardDisplay b;
   string move;
   string enterAndIndent = "\n    ";
   string indent = "    ";
+  cout << "Insert command (h for help):  ";
+  cin >> move;
   while (move != "q"){
-    cout << "Insert command (h for help):  ";
-    cin >> move;
     if (move == "h"){
       printHelpMenu();
     } else {
@@ -49,6 +49,8 @@ int main() {
       }
     }
     cout << endl << endl << endl;
+    cout << "Insert command (h for help):  ";
+    cin >> move;
   }
   return 0;
 }

@@ -1,5 +1,5 @@
 #pragma once
-
+#include "board.h"
 
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
@@ -28,5 +28,6 @@ class boardDisplay: public board {
     static const int square_size = 60;
     static const int margin_size = 20;
 
+    ALLEGRO_BITMAP * pieces[12];
     ALLEGRO_COLOR square_color[2];
 };
